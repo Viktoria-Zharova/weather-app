@@ -68,9 +68,11 @@ const App: React.FC = () => {
         fetchWeatherData();
     };
 
+    const debouncedHandleSearchClick = useCallback(debounce(handleSearchClick, 300), [city]);
+
     return (
         <div className="container">
-            <Input value={city} onChange={handleCityChange} />
+            <Input value={city} onChange={handleCityChange} onKeyUp={debouncedHandleSearchClick} />
             <Button onClick={handleSearchClick} />
             {weatherData && (
                 <Weather
