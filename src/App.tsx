@@ -28,7 +28,7 @@ const api = axios.create({
     adapter: cache.adapter
 });
 
-const App: React.FC = () => {
+const App = () => {
     const [city, setCity] = useState<string>('');
     const [weatherData, setWeatherData] = useState<WeatherData | null>(null);
     const [cities, setCities] = useState<City[]>([]);
@@ -53,7 +53,8 @@ const App: React.FC = () => {
 
     const fetchWeatherData = async () => {
         try {
-            const response: AxiosResponse<WeatherData> = await axios.get(`https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=762e5ee1591ef8fad4b67bfe3e823fb0&units=metric`);
+            const response: AxiosResponse<WeatherData> = await axios.get(`https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=762e5ee1591ef8fad4b67bfe3e823fb0&units=metric
+`);
             setWeatherData(response.data);
         } catch (error) {
             console.error('Error fetching weather data:', error);
@@ -65,14 +66,27 @@ const App: React.FC = () => {
     };
 
     const handleSearchClick = () => {
-        fetchWeatherData();
+        if (city.trim() !== '') {
+            fetchWeatherData();
+        } else {
+            console.error('City name cannot be empty');
+        }
     };
 
-    const debouncedHandleSearchClick = useCallback(debounce(handleSearchClick, 300), [city]);
+    const debouncedHandleSearchClick = useCallback(
+        debounce(() => {
+            if (city.trim() !== '') {
+                fetchWeatherData();
+            } else {
+                console.error('City name cannot be empty');
+            }
+        }, 300),
+        [city]
+    );
 
     return (
         <div className="container">
-            <Input value={city} onChange={handleCityChange} onKeyUp={debouncedHandleSearchClick} />
+            <Input value={city} onChange={handleCityChange} onKeyUp={() => debouncedHandleSearchClick()} />
             <Button onClick={handleSearchClick} />
             {weatherData && (
                 <Weather

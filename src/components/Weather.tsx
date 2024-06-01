@@ -6,7 +6,7 @@ interface WeatherProps {
     description: string;
 }
 
-const Weather: React.FC<WeatherProps> = ({ cityName, temperature, description }) => {
+const Weather = ({ cityName, temperature, description }: WeatherProps) => {
     return (
         <div className="weather">
             <h2>Weather in {cityName}</h2>

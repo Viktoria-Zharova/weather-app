@@ -6,7 +6,7 @@ interface InputProps {
     onKeyUp: () => void;
 }
 
-const Input: React.FC<InputProps> = ({ value, onChange, onKeyUp }) => {
+const Input = ({ value, onChange, onKeyUp }: InputProps) => {
     return (
         <input
             type="text"
